@@ -1,4 +1,45 @@
-img {
-  width: 5.265rem;
-  height: 3.933125rem;
+img.imageTitle {
+  width: 8.724rem;
+  height: 6.293rem;
+}
+
+.home {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  margin-top: 12.6rem;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+button {
+  width: 18.1rem;
+  height: 4.7rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  border-radius: 0.5rem;
+  gap: 1.7rem;
+
+  background: #e9e6e3;
+}
+
+button img {
+  width: 3.556rem;
+  height: 2.529rem;
+}
+
+p {
+  margin-top: 2.6rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  width: 38.1rem;
+  text-align: center;
 }
