@@ -23,7 +23,7 @@ export function Home() {
     try {
       const response = await api.get(`/movie/${movies}`);
       const { title, overview, poster_path } = response.data;
-      console.log(response.data.backdrop_path);
+      console.log(response.data.id);
 
       setTitle(title);
       setOverview(overview);

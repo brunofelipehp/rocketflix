@@ -10,8 +10,8 @@ export function Movie({ title, overview, poster_path }: MovieProps) {
         src={`https://image.tmdb.org/t/p/w200${poster_path}`}
         alt="imagem do filme"
       />
-      <div>
-        <h1>{title}</h1>
+      <div className="about">
+        <h2>{title}</h2>
         <p>{overview}</p>
       </div>
     </div>

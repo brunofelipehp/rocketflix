@@ -1,10 +1,10 @@
 import axios from "axios";
-import * as dotenv from "dotenv";
-dotenv.config();
 
 export const api = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   headers: {
-    Authorization: `Bearer  ${process.env.API_KEY}`,
+    Authorization: `Bearer  ${import.meta.env.VITE_API_KEY}`,
   },
 });
+
+console.log(import.meta.env.VITE_API_KEY);
