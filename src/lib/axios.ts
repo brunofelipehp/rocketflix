@@ -6,5 +6,3 @@ export const api = axios.create({
     Authorization: `Bearer  ${import.meta.env.VITE_API_KEY}`,
   },
 });
-
-console.log(import.meta.env.VITE_API_KEY);
