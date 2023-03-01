@@ -10,6 +10,7 @@ export interface HomeProps {
   title?: string;
   poster_path?: string;
   overview?: string;
+  clik: boolean;
 }
 
 export function Home() {
@@ -17,12 +18,14 @@ export function Home() {
   const [overview, setOverview] = useState("");
   const [poster, setPoster] = useState("");
   const [movieId, setMovieId] = useState();
-  const [findMovie, setFindMovie] = useState<number>(12);
+  const [cliked, setCliked] = useState(false);
+  const [findMovie, setFindMovie] = useState<number>();
 
   async function handleMovies() {
-    const movieList = await api.get(`/movie/changes`);
-    const moviesTotal = movieList.data.results.length;
+    const movieList = await api.get(`/movie/popular`);
+    const moviesTotal = movieList.data.total_results;
     const movieHandleId = Math.floor(Math.random() * moviesTotal);
+
     setFindMovie(movieHandleId);
   }
 
@@ -30,19 +33,20 @@ export function Home() {
     api
       .get(`/movie/${findMovie}`)
       .then((response) => {
-        console.log(response.status);
-        const { title, overview, poster_path } = response.data;
-        setMovieId(response.data.id);
-        setTitle(title);
-        setOverview(overview);
-        setPoster(poster_path);
-
-        if (response.status === 404) {
-          return new Error("não encontrou qualquer resultado");
+        if (!response.data.adult) {
+          const { title, overview, poster_path, id } = response.data;
+          setMovieId(id);
+          setTitle(title);
+          setOverview(overview);
+          setPoster(poster_path);
         }
+        setCliked(true);
       })
       .catch(function (error) {
-        console.error(error);
+        if (error.response.data.status_code) {
+          console.clear();
+        }
+        setCliked(false);
       });
   }, [findMovie]);
 
@@ -52,7 +56,12 @@ export function Home() {
       <h1>Não sabe oque assistir</h1>
 
       {movieId && (
-        <Movie title={title} overview={overview} poster_path={poster} />
+        <Movie
+          title={title}
+          overview={overview}
+          poster_path={poster}
+          clik={cliked}
+        />
       )}
       <button onClick={handleMovies}>
         <img src={imageButton} alt="icone do botão" />

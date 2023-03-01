@@ -3,7 +3,7 @@ import "./styles.css";
 
 interface MovieProps extends HomeProps {}
 
-export function Movie({ title, overview, poster_path }: MovieProps) {
+export function Movie({ title, overview, poster_path, clik }: MovieProps) {
   return (
     <div className="movie">
       <img
@@ -11,8 +11,12 @@ export function Movie({ title, overview, poster_path }: MovieProps) {
         alt="imagem do filme"
       />
       <div className="about">
-        <h2>{title}</h2>
-        <p>{overview}</p>
+        <h2>
+          {clik
+            ? title
+            : "Ops, hoje não é dia de assistir filme. Bora codar! 🚀"}
+        </h2>
+        <p>{clik ? overview : ""}</p>
       </div>
     </div>
   );
