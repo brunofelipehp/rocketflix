@@ -7,14 +7,14 @@ import { Movie } from "../Movie";
 import { log } from "console";
 
 export interface HomeProps {
-  title?: string;
+  title: string;
   poster_path?: string;
   overview?: string;
   clik: boolean;
 }
 
 export function Home() {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState<string>("");
   const [overview, setOverview] = useState("");
   const [poster, setPoster] = useState("");
   const [movieId, setMovieId] = useState();
@@ -33,14 +33,14 @@ export function Home() {
     api
       .get(`/movie/${findMovie}`)
       .then((response) => {
-        if (!response.data.adult) {
-          const { title, overview, poster_path, id } = response.data;
+        const { title, overview, poster_path, id, adult } = response.data;
+        if (!adult) {
           setMovieId(id);
           setTitle(title);
           setOverview(overview);
           setPoster(poster_path);
+          setCliked(true);
         }
-        setCliked(true);
       })
       .catch(function (error) {
         if (error.response.data.status_code) {
