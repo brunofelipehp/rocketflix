@@ -1,24 +1,22 @@
 import "./styles.css";
 import imageHeader from "../../assets/favico/android-chrome-512x512.png";
 import imageButton from "../../assets/favico/favicon-32x32.png";
-import { useCallback, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { api } from "../../lib/axios";
 import { Movie } from "../Movie";
-import { log } from "console";
 
 export interface HomeProps {
-  title: string;
-  poster_path?: string;
+  movieId?: number | null;
+  title?: string;
+  posterPath?: string;
   overview?: string;
-  clik: boolean;
 }
 
 export function Home() {
-  const [title, setTitle] = useState<string>("");
-  const [overview, setOverview] = useState("");
-  const [poster, setPoster] = useState("");
-  const [movieId, setMovieId] = useState();
-  const [cliked, setCliked] = useState(false);
+  const [title, setTitle] = useState<string>();
+  const [overview, setOverview] = useState<string>();
+  const [poster, setPoster] = useState<string>();
+  const [searchMovieId, setSearchMovieId] = useState<number | null>();
   const [findMovie, setFindMovie] = useState<number>();
 
   async function handleMovies() {
@@ -30,23 +28,22 @@ export function Home() {
   }
 
   useEffect(() => {
-    api
-      .get(`/movie/${findMovie}`)
+    api.get(`/movie/${findMovie}`)
       .then((response) => {
-        const { title, overview, poster_path, id, adult } = response.data;
+        const { title, overview, poster_path: posterPath, id, adult } = response.data;
         if (!adult) {
-          setMovieId(id);
+          setSearchMovieId(id);
           setTitle(title);
           setOverview(overview);
-          setPoster(poster_path);
-          setCliked(true);
+          setPoster(posterPath);
         }
+
       })
       .catch(function (error) {
         if (error.response.data.status_code) {
           console.clear();
+          setSearchMovieId(null)
         }
-        setCliked(false);
       });
   }, [findMovie]);
 
@@ -55,14 +52,15 @@ export function Home() {
       <img className="imageTitle" src={imageHeader} alt="" />
       <h1>Não sabe oque assistir</h1>
 
-      {movieId && (
+      {findMovie && (
         <Movie
+        movieId={searchMovieId}
           title={title}
           overview={overview}
-          poster_path={poster}
-          clik={cliked}
+          posterPath={poster}
         />
       )}
+
       <button onClick={handleMovies}>
         <img src={imageButton} alt="icone do botão" />
         Encontrar filme

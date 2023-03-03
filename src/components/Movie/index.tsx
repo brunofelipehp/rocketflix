@@ -4,29 +4,31 @@ import codarImg from "../../assets/poster.jpg";
 import { useEffect, useState } from "react";
 interface MovieProps extends HomeProps {}
 
-export function Movie({ title, overview, poster_path, clik }: MovieProps) {
+export function Movie({ title, overview, posterPath, movieId }: MovieProps) {
   const [image, setImage] = useState<string>();
 
   function handleImage() {
-    poster_path
-      ? setImage(`https://image.tmdb.org/t/p/w200${poster_path}`)
+   posterPath && movieId !== null
+      ? setImage(`https://image.tmdb.org/t/p/w200${posterPath}`)
       : setImage(codarImg);
   }
 
   useEffect(() => {
     handleImage();
-  }, [poster_path]);
+  }, [movieId]);
 
   return (
     <div className="movie">
       <img src={image} alt="imagem do filme" />
       <div className="about">
         <h2>
-          {clik
+          {
+          movieId !== null
             ? title
-            : "Ops, hoje não é dia de assistir filme. Bora codar! 🚀"}
+            : "Ops, hoje não é dia de assistir filme. Bora codar! 🚀"
+            }
         </h2>
-        <p>{clik ? overview : ""}</p>
+        <p>{movieId !== null ? overview : ""}</p>
       </div>
     </div>
   );
