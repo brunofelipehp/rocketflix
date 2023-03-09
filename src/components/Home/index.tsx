@@ -36,6 +36,8 @@ export function Home() {
           setTitle(title);
           setOverview(overview);
           setPoster(posterPath);
+        }else {
+          setSearchMovieId(null);
         }
 
       })
