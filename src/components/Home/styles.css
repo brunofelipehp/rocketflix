@@ -31,6 +31,11 @@ button {
   background: #e9e6e3;
 }
 
+button:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
 button img {
   width: 3.556rem;
   height: 2.529rem;
@@ -42,4 +47,12 @@ p {
   font-weight: 400;
   width: 38.1rem;
   text-align: center;
+}
+
+@media (max-width: 500px) {
+  .home {
+    text-align: center;
+    margin-top: 5.6rem;
+    margin-bottom: 10.3rem;
+  }
 }

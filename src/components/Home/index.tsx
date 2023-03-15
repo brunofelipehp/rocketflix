@@ -1,7 +1,7 @@
 import "./styles.css";
 import imageHeader from "../../assets/favico/android-chrome-512x512.png";
 import imageButton from "../../assets/favico/favicon-32x32.png";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../lib/axios";
 import { Movie } from "../Movie";
 
@@ -28,23 +28,29 @@ export function Home() {
   }
 
   useEffect(() => {
-    api.get(`/movie/${findMovie}`)
+    api
+      .get(`/movie/${findMovie}`)
       .then((response) => {
-        const { title, overview, poster_path: posterPath, id, adult } = response.data;
+        const {
+          title,
+          overview,
+          poster_path: posterPath,
+          id,
+          adult,
+        } = response.data;
         if (!adult) {
           setSearchMovieId(id);
           setTitle(title);
           setOverview(overview);
           setPoster(posterPath);
-        }else {
+        } else {
           setSearchMovieId(null);
         }
-
       })
       .catch(function (error) {
         if (error.response.data.status_code) {
           console.clear();
-          setSearchMovieId(null)
+          setSearchMovieId(null);
         }
       });
   }, [findMovie]);
@@ -52,11 +58,11 @@ export function Home() {
   return (
     <div className="home">
       <img className="imageTitle" src={imageHeader} alt="" />
-      <h1>Não sabe oque assistir</h1>
+      <h1>Não sabe o que assistir</h1>
 
       {findMovie && (
         <Movie
-        movieId={searchMovieId}
+          movieId={searchMovieId}
           title={title}
           overview={overview}
           posterPath={poster}
