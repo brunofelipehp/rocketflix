@@ -18,6 +18,7 @@ export function Home() {
   const [poster, setPoster] = useState<string>();
   const [searchMovieId, setSearchMovieId] = useState<number | null>();
   const [findMovie, setFindMovie] = useState<number>();
+  const [loading, setLoading] = useState(false);
 
   async function handleMovies() {
     const movieList = await api.get(`/movie/popular`);
@@ -28,6 +29,7 @@ export function Home() {
   }
 
   useEffect(() => {
+    setLoading(true);
     api
       .get(`/movie/${findMovie}`)
       .then((response) => {
@@ -53,6 +55,7 @@ export function Home() {
           setSearchMovieId(null);
         }
       });
+    setLoading(false);
   }, [findMovie]);
 
   return (
@@ -69,10 +72,18 @@ export function Home() {
         />
       )}
 
-      <button onClick={handleMovies}>
-        <img src={imageButton} alt="icone do botão" />
-        Encontrar filme
-      </button>
+      {!loading && (
+        <button onClick={handleMovies}>
+          <img src={imageButton} alt="icone do botão" />
+          Encontrar filme
+        </button>
+      )}
+      {loading && (
+        <button onClick={handleMovies} disabled>
+          <img src={imageButton} alt="icone do botão" />
+          Buscando...
+        </button>
+      )}
       <p>
         Clique em "Encontrar filme" que traremos informações de algum filme para
         você assistir hoje.
