@@ -29,15 +29,15 @@ export function Home() {
   }
 
   useEffect(() => {
-    setLoading(true);
-    api
-      .get(`/movie/${findMovie}`)
-      .then((response) => {
+    const handleMovies = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(`/movie/${findMovie}`);
         const {
+          id,
           title,
           overview,
           poster_path: posterPath,
-          id,
           adult,
         } = response.data;
         if (!adult) {
@@ -48,14 +48,15 @@ export function Home() {
         } else {
           setSearchMovieId(null);
         }
-      })
-      .catch(function (error) {
-        if (error.response.data.status_code) {
+      } catch (error) {
+        if (error === 404) {
           console.clear();
           setSearchMovieId(null);
         }
-      });
-    setLoading(false);
+      }
+      handleMovies();
+      setLoading(false);
+    };
   }, [findMovie]);
 
   return (
