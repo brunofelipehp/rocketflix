@@ -21,23 +21,24 @@ export function Home() {
   const [loading, setLoading] = useState(false);
 
   async function handleMovies() {
+    setLoading(true);
     const movieList = await api.get(`/movie/popular`);
     const moviesTotal = movieList.data.total_results;
     const movieHandleId = Math.floor(Math.random() * moviesTotal);
 
     setFindMovie(movieHandleId);
+    setLoading(false);
   }
 
   useEffect(() => {
-    const handleMovies = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get(`/movie/${findMovie}`);
+    api
+      .get(`/movie/${findMovie}`)
+      .then((response) => {
         const {
-          id,
           title,
           overview,
           poster_path: posterPath,
+          id,
           adult,
         } = response.data;
         if (!adult) {
@@ -48,15 +49,13 @@ export function Home() {
         } else {
           setSearchMovieId(null);
         }
-      } catch (error) {
-        if (error === 404) {
+      })
+      .catch(function (error) {
+        if (error.response.data.status_code) {
           console.clear();
           setSearchMovieId(null);
         }
-      }
-      handleMovies();
-      setLoading(false);
-    };
+      });
   }, [findMovie]);
 
   return (
