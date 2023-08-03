@@ -1,61 +1,58 @@
-import "./styles.css";
+import { useEffect, useState } from "react";
+
+import { MovieCard } from "../MovieCard";
+
+import { api } from "../../lib/axios";
+
 import imageHeader from "../../assets/favico/android-chrome-512x512.png";
 import imageButton from "../../assets/favico/favicon-32x32.png";
-import { useEffect, useState } from "react";
-import { api } from "../../lib/axios";
-import { Movie } from "../Movie";
 
-export interface HomeProps {
-  movieId?: number | null;
-  title?: string;
-  posterPath?: string;
-  overview?: string;
-}
+import "./styles.css";
 
 export function Home() {
   const [title, setTitle] = useState<string>();
   const [overview, setOverview] = useState<string>();
   const [poster, setPoster] = useState<string>();
-  const [searchMovieId, setSearchMovieId] = useState<number | null>();
+  const [movieId, setMovieId] = useState<number | null>();
   const [findMovie, setFindMovie] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  async function handleMovies() {
-    setLoading(true);
-    const movieList = await api.get(`/movie/popular`);
-    const moviesTotal = movieList.data.total_results;
-    const movieHandleId = Math.floor(Math.random() * moviesTotal);
-
+  const findId = () => {
+    const movieHandleId = Math.floor(Math.random() * 8000);
     setFindMovie(movieHandleId);
+  };
+
+  const handleMovies = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/movie/${findMovie}?language=pt-BR`);
+      const {
+        id,
+        title,
+        overview,
+        poster_path: posterPath,
+        adult,
+      } = response.data;
+
+      if (!adult) {
+        setMovieId(id);
+        setTitle(title);
+        setOverview(overview);
+        setPoster(posterPath);
+      } else {
+        setMovieId(null);
+      }
+    } catch (error) {
+      setMovieId(null);
+      console.error("Filme não encontrado", error);
+    }
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
-    api
-      .get(`/movie/${findMovie}`)
-      .then((response) => {
-        const {
-          title,
-          overview,
-          poster_path: posterPath,
-          id,
-          adult,
-        } = response.data;
-        if (!adult) {
-          setSearchMovieId(id);
-          setTitle(title);
-          setOverview(overview);
-          setPoster(posterPath);
-        } else {
-          setSearchMovieId(null);
-        }
-      })
-      .catch(function (error) {
-        if (error.response.data.status_code) {
-          console.clear();
-          setSearchMovieId(null);
-        }
-      });
+    if (findMovie) {
+      handleMovies();
+    }
   }, [findMovie]);
 
   return (
@@ -64,26 +61,18 @@ export function Home() {
       <h1>Não sabe o que assistir</h1>
 
       {findMovie && (
-        <Movie
-          movieId={searchMovieId}
+        <MovieCard
+          id={movieId}
           title={title}
           overview={overview}
-          posterPath={poster}
+          poster_path={poster}
         />
       )}
 
-      {!loading && (
-        <button onClick={handleMovies}>
-          <img src={imageButton} alt="icone do botão" />
-          Encontrar filme
-        </button>
-      )}
-      {loading && (
-        <button onClick={handleMovies} disabled>
-          <img src={imageButton} alt="icone do botão" />
-          Buscando...
-        </button>
-      )}
+      <button onClick={findId} disabled={loading}>
+        <img src={imageButton} alt="icone do botão" />
+        {loading ? "Buscando..." : "Encontrar filme"}
+      </button>
       <p>
         Clique em "Encontrar filme" que traremos informações de algum filme para
         você assistir hoje.

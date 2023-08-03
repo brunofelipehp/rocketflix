@@ -15,10 +15,11 @@
   font-family: "Poppins", sans-serif;
 }
 
-body {
+  body {
   background: var(--background) no-repeat;
   color: var(--subtitle);
   font-size: 1.6rem;
+  height: 100vh;
 }
 
 @media (min-width: 500px) {

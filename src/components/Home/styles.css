@@ -6,7 +6,6 @@ img.imageTitle {
 .home {
   display: grid;
   justify-items: center;
-  align-items: center;
   margin-top: 12.6rem;
 }
 

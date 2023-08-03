@@ -28,6 +28,14 @@
   font-weight: 400;
   font-size: 1.6rem;
   line-height: 2.4rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.movie p::-webkit-scrollbar {
+  width: 6px;
+}
+.movie p::-webkit-scrollbar-thumb {
+  background-color: transparent;
 }
 
 @media (max-width: 500px) {
